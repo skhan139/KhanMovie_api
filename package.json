@@ -1,14 +1,14 @@
 {
-    "name": "movie_api",
+    "name": "khanmovie_api",
     "version": "1.0.0",
     "description": "",
-    "main": "server.js",
+    "main": "index.js",
     "scripts": {
       "test": "echo \"Error: no test specified\" && exit 1",
       "start": "node server.js"
     },
     "keywords": [],
-    "author": "",
+    "author": "Sami Khan",
     "license": "ISC",
     "dependencies": {
       "body-parser": "^1.20.2",
