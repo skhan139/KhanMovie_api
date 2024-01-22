@@ -1,279 +1,256 @@
-const express = require('express');
-fs = require('fs'),
-morgan = require('morgan'),
-path = require('path');
-
+const express = require('express'),
+ morgan = require('morgan'),
+ bodyParser = require('body-parser'),
+ uuid = require('uuid');
 const app = express();
-
-
-const accessLogStream = fs.createWriteStream(path.join(__dirname, 'log.txt'), {flags: 'a'});
-
-let moviesDB = [
+app.use(bodyParser.json()); //any time using req.body, the data will be expected to be in JSON format
+// log all requests
+app.use(morgan('common'));
+// Users
+let users = [
     {
         id: 1,
-        title: 'The Batman',
-        url: '/movies/The%20Batman'
-    
+        name: 'Alex',
+        favoriteMovies: ['American Psycho']
     },
     {
         id: 2,
-        title: 'Aquaman',
-        url: '/movies/Aquaman'
-    },
-    {
-        id: 3,
-        title: 'American Psycho',
-        url: '/movies/American%20Psycho'
-    },
-    {
-        id: 4,
-        title: 'Fight Club',
-        url: '/movies/Fight%20Club'
-    },
-    {
-        id: 5,
-        title: 'American Assassin',
-        url: '/movies/American%20Assassin'
-    },
-    {
-        id: 6,
-        title: 'The Dark Knight Rises',
-        url: '/movies/The%20Dark%20Knight%20Rises'
-    },
-    {
-        id: 7,
-        title: 'The Patriot',
-        url: '/movies/The%20Patriot'
-    },
-    {
-        id: 8,
-        title: 'Gladiator',
-        url: '/movies/Gladiator'
-    },
-    {
-        id: 9,
-        title: 'John Wick',
-        url: '/movies/John%20Wick'
-    },
-    {
-        id: 10,
-        title: 'Jason Bourne',
-        url: '/movies/Jason%20Bourne'
+        name: 'Kelly',
+        favoriteMovies: []
     }
 ]
-let movieDetails = [
+// Movies
+let topMovies = [
     {
-        id: 1,
-        title: 'The Batman',
-        director: 'Matt Reeves',
-        genre: 'Action/Crime',
-        releaseYear: 2022,
-        imageUrl: '',
-        featured: true
-    },
-    {
-        id: 2,
-        title: 'Aquaman',
-        director: 'James Wan',
-        genre: 'Action/Fantasy',
-        releaseYear: 2018,
-        imageUrl: '',
-        featured: true
-    },
-        {
-        id: 3,
         title: 'American Psycho',
-        director: 'Mary Harron',
-        genre: 'Crime/Drama',
-        releaseYear: 2000,
-        imageUrl: '',
-        featured: true
+        year: '2000',
+        genre: {
+            genreName: 'Crime/Drama',
+            description: 'Crime and Drama genres in film explore the psychological and criminal aspects of characters lives. Crime delves into unlawful activities, investigations, and mysteries, while Drama adds depth through character development, emotions, and intricate storytelling.'
+        },
+        director: {
+            directorName: 'Mary Harron',
+            birth: '1953'
+        }
     },
-        {
-        id: 4,
+    {
         title: 'Fight Club',
-        director: 'David Fincher',
-        genre: 'Drama',
-        releaseYear: 1999,
-        imageUrl: '',
-        featured: true
+        year: '1999',
+        genre: {
+            genreName: 'Drama',
+            description: 'Drama in film examines human experiences, emotions, and relationships. It often delves into complex themes, character development, and societal issues, providing thought-provoking narratives.'
+        },
+        director: {
+            directorName: 'David Fincher',
+            birth: '1962'
+        }
     },
-        {
-        id: 5,
+    {
         title: 'American Assassin',
-        director: 'Michael Cuesta',
-        genre: 'Action/Thriller',
-        releaseYear: 2017,
-        imageUrl: '',
-        featured: true
+        year: '2017',
+        genre: {
+            genreName: 'Action/Thriller',
+            description: 'Action features intense and stylishly choreographed sequences, while Thriller adds suspense and intrigue. This combination delivers a captivating cinematic experience with high-stakes situations.'
+        },
+        director: {
+            directorName: 'Chad Stahelski',
+            birth: '1968'
+        }
     },
-        {
-        id: 6,
+    {
         title: 'The Dark Knight Rises',
-        director: 'Christopher Nolan',
-        genre: 'Action/Adventure',
-        releaseYear: 2012,
-        imageUrl: '',
-        featured: true
+        year: '2012',
+        genre: {
+            genreName: 'Action/Adventure',
+            description: 'Action combines high-stakes sequences with dynamic elements, while Adventure explores journeys, challenges, and heroic quests. Together, they create an exciting and visually captivating cinematic experience.'
+        },
+        director: {
+            directorName: 'Christopher Nolan',
+            birth: '1970'
+        }
     },
-        {
-        id: 7,
+    {
         title: 'The Patriot',
-        director: 'Roland Emmerich',
-        genre: 'Action/Drama',
-        releaseYear: 2000,
-        imageUrl: '',
-        featured: true
+        year: '2000',
+        genre: {
+            genreName: 'Action/Drama',
+            description: 'Action provides thrilling combat and sequences, while Drama adds emotional depth and explores character motivations. This combination creates a compelling narrative with intense action and character-driven storytelling.'
+        },
+        director: {
+            directorName: 'Roland Emmerich',
+            birth: '1955'
+        }
     },
-        {
-        id: 8,
+    {
         title: 'Gladiator',
-        director: 'Ridley Scott',
-        genre: 'Action/Drama',
-        releaseYear: 2000,
-        imageUrl: '',
-        featured: true
+        year: '2000',
+        genre: {
+            genreName: 'Action/Drama',
+            description: 'Action provides thrilling combat and sequences, while Drama adds emotional depth and explores character motivations. This combination creates a compelling narrative with intense action and character-driven storytelling.'
+        },
+        director: {
+            directorName: 'Ridley Scott',
+            birth: '1937'
+        }
     },
-        {
-        id: 9,
+    {
         title: 'John Wick',
-        director: 'Chad Stahelski',
-        genre: 'Thriller',
-        releaseYear: 2014,
-        imageUrl: '',
-        featured: true
+        year: '2014',
+        genre: {
+            genreName: 'Action/Thriller',
+            description: 'Action features intense and stylishly choreographed sequences, while Thriller adds suspense and intrigue. This combination delivers a captivating cinematic experience with high-stakes situations.'
+        },
+        director: {
+            directorName: 'Chad Stahelski',
+            birth: '1968'
+        }
     },
-        {
-        id: 10,
+    {
         title: 'Jason Bourne',
-        director: 'Paul Greengrass',
-        genre: 'Thriller',
-        releaseYear: 2017,
-        imageUrl: '',
-        featured: true
+        year: '2016',
+        genre: {
+            genreName: 'Action/Thriller',
+            description: 'Action features intense and stylishly choreographed sequences, while Thriller adds suspense and intrigue. This combination delivers a captivating cinematic experience with high-stakes situations'
+        },
+        director: {
+            directorName: 'Paul Greengrass',
+            birth: '1955'
+        }
+    },
+    {
+        title: 'The Batman',
+        year: '2022',
+        genre: {
+            genreName: 'Crime, Drama',
+            description: 'Crime and Drama genres in film explore the psychological and criminal aspects of characters lives. Crime delves into unlawful activities, investigations, and mysteries, while Drama adds depth through character development, emotions, and intricate storytelling.'
+        },
+        director: {
+            directorName: 'Matt Reeves',
+            birth: '1966'
+        }
+    },
+    {
+        title: 'Aquaman',
+        year: '2023',
+        genre: {
+            genreName: 'Adventure, Fantasy',
+            description: 'The Adventure/Fantasy genre combines elements of thrilling journeys, magical realms, and epic quests. It often involves characters embarking on extraordinary adventures in fantastical settings filled with mythical creatures, magic, and otherworldly landscapes.'
+        },
+        director: {
+            directorName: 'James Wan',
+            birth: '1977'
+        }
     }
-
-];
-
-let genres = [
-    {
-        title: 'action',
-        description: 'a film genre in which the protagonist is thrust into a series of events that typically involve violence and physical feats.'
+]
+// CREATE new user
+app.post('/users', (req, res) => {
+    const newUser = req.body;
+    if (newUser.name) {
+        newUser.id = uuid.v4();
+        users.push(newUser);
+        res.status(201).json(newUser)
+    } else {
+        res.status(400).send('Users need names.')
     }
-];
-let directors = [
-    {
-        name: "Matt Reeves",
-        bio: "Matthew George Reeves is an American screenwriter, director, and producer. Reeves began his career as a screenwriter for the films Under Siege 2: Dark Territory (1995) and The Pallbearer (1996), the latter of which marked his feature-length directorial debut.",
-        birthYear: 1966,
-        deathYear: null
-    },
-    {
-        name: "James Wan",
-        bio: "James Wan is an Australian filmmaker. He has primarily worked in the horror genre as the co-creator of the Saw and Insidious franchises and the creator of The Conjuring Universe.",
-        birthYear: 1977,
-        deathYear: null
-    },
-     {
-        name: "Mary Harron",
-        bio: "Mary Harron is a Canadian filmmaker and screenwriter known for her work in independent cinema. She gained critical acclaim for directing films like 'American Psycho' and 'I Shot Andy Warhol.'",
-        birthYear: 1953,
-        deathYear: null
-    },
-    {
-        name: "David Fincher",
-        bio: "David Fincher is an American director and producer known for his work on films like 'Fight Club, 'Se7en', and 'The Social Network.' He is renowned for his distinct visual style and storytelling.",
-        birthYear: 1962,
-        deathYear: null
-    },
-    {
-        name: "Michael Cuesta",
-        bio: "Michael Cuesta is an American film and television director known for his work on projects like 'L.I.E.' and directing episodes of TV series such as 'Homeland' and 'Dexter' ",
-        birthYear: 1963,
-        deathYear: null
-    },
-    {
-        name: "Christopher Nolan",
-        bio: "Christopher Nolan is a British-American filmmaker known for his work on complex and visually stunning films such as 'The Dark Knight Trilogy,'' and 'Interstellar.' ",
-        birthYear: 1970,
-        deathYear: null
-    },
-    {
-        name: "Roland Emmerich",
-        bio: "Roland Emmerich is a German film director and producer known for his work on big-budget disaster and science fiction films such as 'Independence Day' and '2012.' ",
-        birthYear: 1955,
-        deathYear: null
-    },
-    {
-        name: "Ridley Scott",
-        bio: "Sir Ridley Scott is an English film director and producer known for his influential work in both science fiction ('Blade Runner,' 'Alien') and historical epics ('Gladiator,' 'Exodus: Gods and Kings')",
-        birthYear: 1937,
-        deathYear: null
-    },
-    {
-        name: "Chad Stahelski",
-        bio: "Chad Stahelski is an American film director and stuntman known for his work on the 'John Wick' film series. He has a background in martial arts and stunt coordination.",
-        birthYear: 1968,
-        deathYear: null
-    },
-    {
-        name: "Paul Greengrass",
-        bio: "Paul Greengrass is an English film director known for his contributions to the action thriller genre. He directed films like 'The Bourne Supremacy' and 'United 93' ",
-        birthYear: 1955,
-        deathYear: null
-    },
-];
+})
+// UPDATE user information
+app.put('/users/:id', (req, res) => {
+    const id = req.params.id;
+    const updatedUser = req.body;
+    let user = users.find( user => user.id == id );
+    if (user) {
+        user.name = updatedUser.name;
+        res.status(200).json(user);
+    } else {
+        res.status(400).send('There is no such user')
+    }
+})
+// CREATE new favorite movie for user
+app.post('/users/:id/:movieTitle', (req, res) => {
+    const id = req.params.id;
+    const movieTitle = req.params.movieTitle;
+    let user = users.find( user => user.id == id );
+    if (user) {
+        user.favoriteMovies.push(movieTitle);
+        res.status(200).send(movieTitle + ' has been added to user ' + id + '\'s array');
+    } else {
+        res.status(400).send('There is no such user')
+    }
+})
+// DELETE favorite movie for user
+app.delete('/users/:id/:movieTitle', (req, res) => {
+    const id = req.params.id;
+    const movieTitle = req.params.movieTitle;
+    let user = users.find( user => user.id == id );
 
-app.use(morgan('combined', {stream: accessLogStream}));
-app.use(express.static('public'));
+    if (user) {
+        user.favoriteMovies = user.favoriteMovies.filter( title => title !== movieTitle);
+        res.status(200).send(movieTitle + ' has been removed from user ' + id + '\'s array');
+        res.status(200).send(movieTitle + ' has been removed from user ' + id + '\'s array.');
+    } else {
+        res.status(400).send('There is no such user')
+    }
+})
 
-app.get('/movies', (req, res) => {
-    res.json(moviesDB);
-});
-app.get('/movies/:title', (req, res) => {
-    res.json(movieDetails.find((movie) => 
-    { return movie.title === req.params.title }));
-});
+// DELETE user
+app.delete('/users/:id', (req, res) => {
+    const id = req.params.id;
 
-app.get('/genres/:title', (req, res) => {
-    res.json(genres.find((genre) => 
-    { return genre.title === req.params.title }));
-});
+    let user = users.find( user => user.id == id );
 
-app.get('/directors/:name', (req, res) => {
-    res.json(directors.find((director) => 
-    { return director.name === req.params.name }));
-});
 
-app.post('/users', (reg,res) => {
-    res.send('Successful POST request, creating new user');
-});
-
-app.put('/users/:username', (req, res) => {
-    res.send('Successful PUT request upadating user\'s username');
-});
-
-app.put('/users/:username/favorites/:movie-id', (req, res) => {
-    res.send('Successful PUT request adding movie to user\'s favorites list');
-});
-
-app.delete('/users/:username/favorites/:movie-id', (req, res) => {
-    res.send('Successful DELETE request removing movie from user\'s favorites movie list');
-});
-
-app.delete('/users/:username', (req, res) => {
-    res.send('successful DELETE request removing user from list of users');
-});
-
+    if (user) {
+        users = users.filter( user => user.id != id);
+        res.status(200).send('User ' + id + ' has been deleted.');
+    } else {
+        res.status(400).send('There is no such user')
+    }
+})
+// READ index page
 app.get('/', (req, res) => {
-    res.send('Welcome to Movie Flix')
+    res.send('Welcome to my movie page!');
 });
-
+// READ movie list
+app.get('/movies', (req, res) => {
+    res.status(200).json(topMovies);
+});
+// READ movie by title
+app.get('/movies/:title', (req, res) => {
+    const title = req.params.title;
+    const movie = topMovies.find( movie => movie.title === title );
+    if (movie) {
+        res.status(200).json(movie);
+    } else {
+        res.status(400).send('There is no such movie.')
+    }
+})
+// READ genre by name
+app.get('/movies/genre/:genreName', (req, res) => {
+    const genreName = req.params.genreName;
+    const genre = topMovies.find( movie => movie.genre.genreName === genreName ).genre;
+    if (genre) {
+        res.status(200).json(genre);
+    } else {
+        res.status(400).send('There is no such genre.')
+    }
+})
+// READ director by name
+app.get('/movies/directors/:directorName', (req, res) => {
+    const directorName = req.params.directorName;
+    const director = topMovies.find( movie => movie.director.directorName === directorName ).director;
+    if (director) {
+        res.status(200).json(director);
+    } else {
+        res.status(400).send('There is no such director.')
+    }
+})
+app.use(express.static('public'));
+// error handling
 app.use((err, req, res, next) => {
     console.error(err.stack);
-    res.status(500).send('Something Broke!');
+    res.status(500).send('Something broke!');
 });
-
+// listen for request
 app.listen(8080, () => {
-    console.log('The movie app has loaded and is listening on port 8080');
-});
+    console.log('Your app is listening on port 8080.');
+})
