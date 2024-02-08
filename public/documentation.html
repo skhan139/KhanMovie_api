@@ -52,6 +52,20 @@
       <td>An array of JSON objects holding data about all the movies by requested genre</td>
     </tr>
     <tr>
+    <tr>
+        <td>Get list of users</td>
+        <td>/users</td>
+        <td>GET</td>
+        <td>None</td>
+        <td>An array of JSON objects holding data about all the movies by requested genre</td>
+    </tr>
+    <tr>
+      <td>Get a specific user</td>
+      <td>/users/userName</td>
+      <td>GET</td>
+      <td>None</td>
+      <td>An array of JSON objects holding data about all the movies by requested genre</td>
+    </tr>
       <td>Get data about a single movie by title</td>
       <td>/movies/[title]</td>
       <td>GET</td>
@@ -67,7 +81,7 @@
     </tr>
     <tr>
       <td>Add a movie</td>
-      <td>/movies</td>
+      <td>users/userName/movies/moviedID</td>
       <td>POST</td>
       <td>
         A JSON object holding data about the movie to add, structured

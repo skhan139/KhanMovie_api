@@ -8,8 +8,7 @@ const Movies = Models.Movie;
 const Users = Models.User;
 
 mongoose.connect("mongodb://127.0.0.1:27017/movieapi", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
+  useNewUrlParser: true, useUnifiedTopology: true,
 });
 
 // Middleware for parsing requests
@@ -93,30 +92,24 @@ app.post("/users/:Username/movies/:MovieID", async (req, res) => {
 
 //delete
 
-app.delete("/users/:id/:movieTitle", (req, res) => {
-  const { id, movieTitle } = req.params;
-
-  const user =  Users.findById(id);
-
-  if (user) {
-    user.favMovies = user.favMovies.filter((title) => title !== movieTitle);
-    res
-      .status(200)
-      .send(`${movieTitle} has been removed from user ${id}'s array`);
-  } else {
-    res.status(400).send("User not found");
-  }
-});
+app.delete("/users/:Username/movies/:MovieID", async (req, res) => { 
+  await Users.findOneAndUpdate( { Username: req.params.Username }, 
+    { $pull: { FavoriteMovies: req.params.MovieID }, }, { new: true } ) // This line makes sure that the updated document is returned .
+    then((updatedUser) => { res.json(updatedUser); })
+     .catch((err) => 
+    { console.error(err); 
+      res.status(500).send("Error: " + err); }); 
+    });
 
 //delete
 
 app.delete("/users/:Username", (req, res) => {
-  Users.findOneAndRemove({ Username: req.params.userName })
+  Users.findOneAndDelete({ Username: req.params.Username })
     .then((user) => {
       if (!user) {
-        res.status(400).send(req.params.userName + " was not found");
+        res.status(400).send(req.params.Username + " was not found");
       } else {
-        res.status(200).send(req.params.userName + " was deleted");
+        res.status(200).send(req.params.Username + " was deleted");
       }
     })
     .catch((err) => {
