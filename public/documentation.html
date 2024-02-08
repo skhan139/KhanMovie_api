@@ -80,7 +80,7 @@
       </td>
     </tr>
     <tr>
-      <td>Add a movie</td>
+      <td>Add a movie by ID</td>
       <td>users/userName/movies/moviedID</td>
       <td>POST</td>
       <td>
@@ -118,25 +118,25 @@
         A JSON object holding data about the user to add, structured
         like:<br />
         { 'username': '[username]',<br />
-        'name': 'John Doe',<br />
+        'password': 'PASSWORD',<br />
         'Birth-date': '01/01/1980',<br />
         'favorited-movies': <br />
-        { 'movie': '[movie title]'} }
+        { 'movie': '[movie id]'} }
       </td>
       <td>
         A JSON object holding data about the user that was added, including
         an ID:<br />
         { 'id': '######',<br />
         'username': '[username]',<br />
-        'name': 'John Doe',<br />
+        'password': '{password}',<br />
         'Birth-date': '01/01/1980',<br />
         'favorited-movies': <br />
-        { 'movie': '[movie title]'} }
+        { 'movie': '[movie id]'} }
       </td>
     </tr>
     <tr>
       <td>Remove a movie from a user's favorites list</td>
-      <td>/users/[name]/[movie]</td>
+      <td>/users/[name]/[movieID]</td>
       <td>DELETE</td>
       <td>None</td>
       <td>
