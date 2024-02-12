@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 const Models = require("./models");
 const Movies = Models.Movie;
 const Users = Models.User;
+const { check, validationResult } = require('express-validator');
 
 mongoose.connect("mongodb://127.0.0.1:27017/movieapi", {
   useNewUrlParser: true, useUnifiedTopology: true,
@@ -13,6 +14,8 @@ mongoose.connect("mongodb://127.0.0.1:27017/movieapi", {
 
 // Middleware for parsing requests
 app.use(bodyParser.urlencoded({ extended: true }));
+const cors = require('cors');
+app.use(cors());
 let auth = require('./auth')(app);
 const passport = require('passport');
 require('./passport');
@@ -52,6 +55,7 @@ app.put('/users/:Username', passport.authenticate('jwt', { session: false }), as
 //Add a user
 
 app.post("/users", async (req, res) => {
+  let hashedPassword = Users.hashPassword(req.body.Password);
   await Users.findOne({ Username: req.body.Username })
     .then((user) => {
       if (user) {
@@ -59,7 +63,7 @@ app.post("/users", async (req, res) => {
       } else {
         Users.create({
           Username: req.body.Username,
-          Password: req.body.Password,
+          Password: hashedPassword,
           Email: req.body.Email,
           Birthday: req.body.Birthday,
         })
@@ -80,6 +84,7 @@ app.post("/users", async (req, res) => {
 
 // Add a movie to a user's list of favorites
 app.post("/users/:Username/movies/:MovieID", passport.authenticate("jwt", { session: false }), async (req, res) => {
+  let hashedPassword = Users.hashPassword(req.body.Password);
   await Users.findOneAndUpdate(
     { Username: req.params.Username },
     {
@@ -213,6 +218,7 @@ app.get("/secreturl", passport.authenticate("jwt", { session: false }), (req, re
 // });
 
 // Listen for requests
-app.listen(8080, () => {
-  console.log("Your app is listening on port 8080.");
+const port = process.env.PORT || 8080;
+app.listen(port, '0.0.0.0',() => {
+ console.log('Listening on Port ' + port);
 });
