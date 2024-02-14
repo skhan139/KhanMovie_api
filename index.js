@@ -7,6 +7,8 @@ const Models = require("./models");
 const Movies = Models.Movie;
 const Users = Models.User;
 const { check, validationResult } = require('express-validator');
+const jwt = require('jsonwebtoken');
+
 
 mongoose.connect("mongodb://127.0.0.1:27017/movieapi", {
   useNewUrlParser: true, useUnifiedTopology: true,
