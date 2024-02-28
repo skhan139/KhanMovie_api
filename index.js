@@ -137,7 +137,7 @@ app.delete("/users/:Username", passport.authenticate("jwt", { session: false }),
 
 //READ
 
-app.get("/", passport.authenticate("jwt", { session: false }), (req, res) => {
+app.get("/", (req, res) => {
   res.send("Welcome to my Top 10 Movies!");
 });
 
