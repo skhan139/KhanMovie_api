@@ -10,6 +10,6 @@ app.get('/', (req, res) => {
 });
 
 // Start the server
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+app.listen(8080);
+
+console.log('My test server is running on Port 8080.');
