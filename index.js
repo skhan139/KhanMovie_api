@@ -9,6 +9,8 @@ const { check, validationResult } = require('express-validator');
 const cors = require('cors');
 const passport = require('passport');
 require('./passport');
+const { MongoClient, ServerApiVersion } = require('mongodb');
+const uri = "mongodb+srv://skhan139:Sami1alex@myflixdb.xqi96gp.mongodb.net/?retryWrites=true&w=majority&appName=myFlixDB";
 
 // Middleware for parsing requests
 app.use(bodyParser.urlencoded({ extended: true }));
