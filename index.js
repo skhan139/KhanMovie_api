@@ -120,8 +120,8 @@ app.delete("/users/:Username/movies/:MovieID", passport.authenticate("jwt", { se
 });
 
 //delete
-app.delete("/users/:Username", passport.authenticate("jwt", { session: false }), (req, res) => {
-  Users.findOneAndDelete({ Username: req.params.Username })
+app.delete("/users/:username", passport.authenticate("jwt", { session: false }), (req, res) => {
+  Users.findOneAndDelete({ username: req.params.Username })
     .then((user) => {
       if (!user) {
         res.status(400).send(req.params.Username + " was not found");
