@@ -98,7 +98,11 @@ app.post("/users", [
     });
 });
 
-// Add a movie to a user's list of favorites
+/**
+ * @route POST /MovieID 
+ * @description Post a favorite movie to user profile.
+ * @returns {Array<Object>} Updated user profile.
+ */
 app.post("/users/:Username/movies/:MovieID", passport.authenticate("jwt", { session: false }), async (req, res) => {
   await Users.findOneAndUpdate(
     { Username: req.params.Username },
@@ -116,7 +120,11 @@ app.post("/users/:Username/movies/:MovieID", passport.authenticate("jwt", { sess
     });
 });
 
-//delete
+/**
+ * @route DELETE /movies.
+ * @description Remove a movie from a user profile.
+ * @returns {Array<Object>} Updated user profile.
+ */
 app.delete("/users/:Username/movies/:MovieID", passport.authenticate("jwt", { session: false }), async (req, res) => {
   await Users.findOneAndUpdate({ Username: req.params.Username },
     { $pull: { FavoriteMovies: req.params.MovieID } },
@@ -174,7 +182,11 @@ app.get("/users/:Username", passport.authenticate("jwt", { session: false }), as
     });
 });
 
-// Get all movies
+/**
+ * @route GET /movies
+ * @description Retrieve a list of all movies.
+ * @returns {Array<Object>} Array of movie objects.
+ */
 app.get('/movies', async (req, res) => {
   await Movies.find()
     .then((movies) => {
@@ -186,7 +198,11 @@ app.get('/movies', async (req, res) => {
     });
 });
 
-// Get a movie by title
+/**
+ * @route GET /movies
+ * @description Retrieve a list of all movies by title.
+ * @returns {Array<Object>} Array of movie objects by title.
+ */
 app.get("/movies/:Title", passport.authenticate("jwt", { session: false }), async (req, res) => {
   await Movies.findOne({ Title: req.params.Title })
     .then((movie) => {
@@ -210,7 +226,11 @@ app.get("/movies/genres/:genreName", passport.authenticate("jwt", { session: fal
     });
 });
 
-// Get movies by director
+/**
+ * @route GET /movies
+ * @description Retrieve a list of all movies by director.
+ * @returns {Array<Object>} Array of movie objects sorted  by director.
+ */
 app.get("/movies/directors/:directorName", passport.authenticate("jwt", { session: false }), async (req, res) => {
   await Movies.find({ "Director.Name": req.params.directorName })
     .then((movies) => {
