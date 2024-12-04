@@ -3,19 +3,20 @@
 A movie management system API offering features like movie information retrieval, user management, authentication, and data validation to ensure smooth operation.
 
 ## Features
-Movies API: Retrieve movie details by title, genre, or director.
-User Management: Administer users and their favorite movies.
-Authentication: Secured by JWT for safe user access.
-Swagger Documentation: Explore the interactive API documentation.
-Data Validation: Guarantees data integrity and consistency across the system.
-Technologies
-Express.js: A lightweight Node.js framework for building the API.
-MongoDB: A NoSQL database for storing user and movie data.
-Mongoose: ODM (Object Data Modeling) tool for MongoDB integration.
-Passport.js: Middleware used for handling authentication.
-Swagger: Tool for generating live API documentation.
-Cors: Middleware for managing cross-origin requests.
-Bcrypt: A library for hashing passwords securely.
+- Movies API: Retrieve movie details by title, genre, or director.
+- User Management: Administer users and their favorite movies.
+- Authentication: Secured by JWT for safe user access.
+- Swagger Documentation: Explore the interactive API documentation.
+- Data Validation: Guarantees data integrity and consistency across the system.
+
+## Technologies
+- Express.js: A lightweight Node.js framework for building the API.
+- MongoDB: A NoSQL database for storing user and movie data.
+- Mongoose: ODM (Object Data Modeling) tool for MongoDB integration.
+- Passport.js: Middleware used for handling authentication.
+- Swagger: Tool for generating live API documentation.
+- Cors: Middleware for managing cross-origin requests.
+- Bcrypt: A library for hashing passwords securely.
 
 ## API Endpoints
 Movies
