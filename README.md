@@ -19,18 +19,19 @@ A movie management system API offering features like movie information retrieval
 - Bcrypt: A library for hashing passwords securely.
 
 ## API Endpoints
+
 Movies
 
-GET /movies: Retrieve a list of all movies.
-GET /movies/:title: Fetch a specific movie by its title.
-GET /movies/genre/:name: Get all movies from a specific genre.
-GET /director/:name: Retrieve movies by a particular director.
+- GET /movies: Retrieve a list of all movies.
+- GET /movies/:title: Fetch a specific movie by its title.
+- GET /movies/genre/:name: Get all movies from a specific genre.
+- GET /director/:name: Retrieve movies by a particular director.
 
 Users
 
-GET /users: Get a list of all registered users.
-POST /users: Create a new user in the system.
-PUT /users/:username: Update an existing user’s details.
-DELETE /users/:username: Remove a user from the system.
-POST /users/:username/movies/:MovieID: Add a movie to a user's favorites.
-DELETE /users/:username/movies/:MovieID: Remove a movie from a user's favorites.
+- GET /users: Get a list of all registered users.
+- POST /users: Create a new user in the system.
+- PUT /users/:username: Update an existing user’s details.
+- DELETE /users/:username: Remove a user from the system.
+- POST /users/:username/movies/:MovieID: Add a movie to a user's favorites.
+- DELETE /users/:username/movies/:MovieID: Remove a movie from a user's favorites.
